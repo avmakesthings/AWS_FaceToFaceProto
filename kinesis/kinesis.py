@@ -8,7 +8,7 @@ client = boto3.client(
 )
 
 verbose = False #TODO: Make an environment variable? Use Logger?
-streamName = "test"
+streamName = "AmazonRekognition_FaceToFace"
 
 kinesisVideoStreamArn = "arn:aws:kinesisvideo:us-west-2:828973683334:stream/test/1529284848830"
 kinesisDataStreamArn = "arn:aws:kinesis:us-west-2:828973683334:stream/AmazonRekognition_FaceToFace"
@@ -62,8 +62,11 @@ class ReadShard (threading.Thread):
             if len(records) == 0:
                 time.sleep(1)
 
-# Blocks forever, reading from a stream
+
 def read_stream():
+    """
+        Reads from a kinesis stream. Blocks indefinitely.
+    """
     resp = describe_stream()
     shards = resp["StreamDescription"]["Shards"]
     

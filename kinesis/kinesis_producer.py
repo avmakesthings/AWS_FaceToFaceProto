@@ -30,6 +30,11 @@ class Producer (threading.Thread):
 
 # Blocks forever, runs kinesis_producer
 def start_producer():
+    """
+        Runs kinesis_producer. Blocks indefinitely.
+        FIXME: This takes over the whole thread right now.
+        Maybe better to just run it in a separate tab?
+    """
     t = Producer()
     t.daemon = True
     t.start()
