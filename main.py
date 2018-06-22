@@ -4,6 +4,7 @@ import sys
 import pprint
 
 def info():
+    
     pp = pprint.PrettyPrinter(indent=4)
 
     resp = rekognition.describe_stream_processor()
@@ -16,7 +17,7 @@ def info():
      
 
 def start():
-    rekognition.start_stream_processor()
+    # rekognition.start_stream_processor()
     # TODO: Is there a way to start/stop kinesis streams?
     kinesis.read_stream()
 

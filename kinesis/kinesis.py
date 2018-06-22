@@ -1,6 +1,7 @@
 import boto3
 import pprint
 import time
+import json
 import threading
 
 client = boto3.client(
@@ -8,10 +9,10 @@ client = boto3.client(
 )
 
 verbose = False #TODO: Make an environment variable? Use Logger?
-streamName = "AmazonRekognition_FaceToFace"
+streamName = "AmazonRekognitionStreamOut"
 
 kinesisVideoStreamArn = "arn:aws:kinesisvideo:us-west-2:828973683334:stream/test/1529284848830"
-kinesisDataStreamArn = "arn:aws:kinesis:us-west-2:828973683334:stream/AmazonRekognition_FaceToFace"
+kinesisDataStreamArn = "arn:aws:kinesis:us-west-2:828973683334:stream/AmazonRekognitionStreamOut"
 
 #TODO Wrap c++ producer stuff as well...
 
@@ -56,6 +57,7 @@ class ReadShard (threading.Thread):
             )
             records = resp["Records"]
             for i in range (len(records)):
+                # jsonRecord = json.loads(records[i])
                 self.stream_out.append(records[i])
 
             next_shard_iterator = resp["NextShardIterator"]
@@ -71,7 +73,8 @@ def read_stream():
     shards = resp["StreamDescription"]["Shards"]
     
     stream_out = []
-
+    # For a single sharded solution, no need to iterate through shards 
+    # and spawn threads. Just get shards[0]
     for i in range (len(shards)):
         t = ReadShard()
         t.daemon = True
